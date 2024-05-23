@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:razorpay_api/razorpay_api.dart';
+
 import '../helper.dart';
 
 class RazorPayOrderResponse {
@@ -22,7 +24,7 @@ class RazorPayOrderResponse {
   final DateTime createdAt;
 
   /// ISO code for the currency [list](https://razorpay.com/docs/international-payments/#supported-currencies)
-  final String currency;
+  final RazorpayCurrency currency;
 
   /// The amount paid against the order.
   final int? amountPaid;
@@ -56,7 +58,7 @@ class RazorPayOrderResponse {
     double? amount,
     int? amountPaid,
     int? amountDue,
-    String? currency,
+    RazorpayCurrency? currency,
     String? receipt,
     String? offerId,
     List<String>? offers,
@@ -89,7 +91,7 @@ class RazorPayOrderResponse {
         amount: (map["amount"] as int).fromRazorPayAmount,
         amountPaid: map["amount_paid"],
         amountDue: map["amount_due"],
-        currency: map["currency"],
+        currency: RazorpayCurrency.values.byName(map["currency"]),
         receipt: map["receipt"],
         offerId: map["offer_id"],
         status: map["status"],
@@ -101,7 +103,7 @@ class RazorPayOrderResponse {
   Map<String, dynamic> toMap() => {
         "id": id,
         "amount": amount,
-        "currency": currency,
+        "currency": currency.name,
         "offer_id": offerId,
         "created_at": createdAt.millisecondsSinceEpoch / 1000,
         if (amountPaid != null) "amount_paid": amountPaid,

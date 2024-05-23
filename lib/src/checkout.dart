@@ -77,7 +77,7 @@ class RazorpayCheckout {
   final String? description;
 
   /// Sets a timeout on Checkout, in seconds. After the specified time limit, the customer will not be able to use Checkout.
-  final int? timeout;
+  final Duration? timeout;
 
   /// Link to an image (usually your business logo) shown on the Checkout form.
   /// Can also be a base64 string if you are not loading the image from a network.
@@ -113,7 +113,7 @@ class RazorpayCheckout {
     String? name,
     String? orderId,
     String? description,
-    int? timeout,
+    Duration? timeout,
     String? image,
     String? customerId,
     bool? rememberCustomer,
@@ -174,7 +174,7 @@ class RazorpayCheckout {
         "allow_rotation": allowRotation,
         "subscription_card_change": subscriptionCardChange,
         if (description != null) "description": description,
-        if (timeout != null) "timeout": timeout,
+        if (timeout != null) "timeout": timeout?.inSeconds,
         if (image != null) "image": image,
         if (customerId != null) "customer_id": customerId,
         if (subscriptionId != null) "subscription_id": subscriptionId,

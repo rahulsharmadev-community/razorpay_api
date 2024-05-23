@@ -3,7 +3,7 @@ import 'package:razorpay_api/razorpay_api.dart';
 
 var razorPayAPI = RazorPayAPI();
 void main() {
-  RazorPayAPI.init(keyId: 'rzp_test_iMZ2GgUhlVxhGv', keySecret: "SGuRrmz5vFc2LUsfW9OSXcjV");
+  RazorPayAPI.init(keyId: '', keySecret: "");
   runApp(const MyApp());
 }
 
@@ -30,8 +30,8 @@ class MyHomePage extends StatelessWidget {
   MyHomePage({super.key});
 
   final _order = RazorPayOrder(
-      amount: 10000,
-      currency: 'INR',
+      amount: 7500,
+      currency: RazorpayCurrency.INR,
       receipt: 'receipt #01',
       notes: {'note1': '100 cr.', 'note: 2': 'hope it will work'});
   late final RazorPayOrderResponse orderResponse;
@@ -81,18 +81,20 @@ class MyHomePage extends StatelessWidget {
                     var checkout = RazorpayCheckout(
                         amount: orderResponse.amount,
                         currency: RazorpayCurrency.INR,
-                        name: 'Shoes Woodland',
+                        name: "WOODLAND Outdoor Shoes For Men",
                         orderId: orderResponse.id,
-                        timeout: 60,
+                        timeout: 120,
                         notes: const {'note: 1': '100 cr.', 'note: 2': 'hope it will work'},
-                        description: 'i am from description',
+                        description:
+                            'Soft foot bed with plush rubberized foam cushioning grounds a cozy slip-on shoe for men. ',
                         sendSmsHash: true,
-                        image: 'https://storage.googleapis.com/cms-storage-bucket/0dbfcc7a59cd1cf16282.png',
+                        image:
+                            'https://rukminim2.flixcart.com/image/832/832/j1b0xow0/shoe/z/d/h/gc-0549108y15nw-44-woodland-camel-original-imaeswufmus2z6kz.jpeg',
                         theme:
                             RazorPayCheckOutTheme(color: Colors.lightBlueAccent, backdropColor: Colors.black),
                         prefill: Prefill(
                             contact: '+918368968075',
-                            name: 'General',
+                            name: 'Rahul Sharma',
                             email: 'rahulsharmadev.talk@gmail.com'));
 
                     razorPayAPI.checkout(checkout);

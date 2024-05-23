@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:razorpay_api/razorpay_api.dart';
+
 class RazorPayOrder {
   RazorPayOrder({
     required this.amount,
@@ -13,7 +15,7 @@ class RazorPayOrder {
   final double amount;
 
   /// ISO code for the currency [list](https://razorpay.com/docs/international-payments/#supported-currencies)
-  final String currency;
+  final RazorpayCurrency currency;
 
   /// Can have a maximum length of 40 characters and has to be unique.
   final String? receipt;
@@ -35,7 +37,7 @@ class RazorPayOrder {
 
   RazorPayOrder copyWith({
     double? amount,
-    String? currency,
+    RazorpayCurrency? currency,
     String? receipt,
     Map<String, dynamic>? notes,
     bool? partialPayment,
@@ -56,7 +58,7 @@ class RazorPayOrder {
 
   factory RazorPayOrder.fromMap(Map<String, dynamic> map) => RazorPayOrder(
         amount: map["amount"] / 100,
-        currency: map["currency"],
+        currency: RazorpayCurrency.values.byName(map["currency"]),
         receipt: map["receipt"],
         notes: map["notes"] != null ? Map.from(map["notes"]) : null,
         partialPayment: map["partial_payment"],
@@ -65,7 +67,7 @@ class RazorPayOrder {
 
   Map<String, dynamic> toMap() => {
         "amount": (amount * 100).toInt(),
-        "currency": currency,
+        "currency": currency.name,
         "partial_payment": partialPayment,
         if (receipt != null) "receipt": receipt,
         if (notes != null) "notes": notes,
