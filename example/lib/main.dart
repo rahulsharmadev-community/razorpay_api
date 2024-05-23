@@ -83,7 +83,7 @@ class MyHomePage extends StatelessWidget {
                         currency: RazorpayCurrency.INR,
                         name: "WOODLAND Outdoor Shoes For Men",
                         orderId: orderResponse.id,
-                        timeout: 120,
+                        timeout: const Duration(minutes: 12),
                         notes: const {'note: 1': '100 cr.', 'note: 2': 'hope it will work'},
                         description:
                             'Soft foot bed with plush rubberized foam cushioning grounds a cozy slip-on shoe for men. ',

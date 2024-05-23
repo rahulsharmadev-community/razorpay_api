@@ -21,14 +21,14 @@ class RazorPayOrderAPI {
     }
   }
 
-  Future<RazorPayOrderResponse?> fetchById(String orderId) async {
+  Future<RazorPayOrderResponse> fetchById(String orderId) async {
     try {
       final orderUri = Uri.parse('$ordersPath/$orderId');
       http.Response response = await http.get(orderUri, headers: RazorPayAPI.headers);
       if (response.statusCode == 200) {
         return RazorPayOrderResponse.fromJson(response.body);
       } else {
-        return null;
+        throw Exception('Error status code ${response.statusCode}');
       }
     } on HttpException catch (error) {
       throw error.message;
@@ -55,7 +55,7 @@ class RazorPayOrderAPI {
   ///
   ///
   /// [doc] https://razorpay.com/docs/api/orders/fetch-all/
-  Future<List<RazorPayOrderResponse>?> fetchAll({
+  Future<List<RazorPayOrderResponse>> fetchAll({
     bool? authorized,
     String? receipt,
     DateTime? from,
@@ -80,7 +80,7 @@ class RazorPayOrderAPI {
         var items = List.from(jsonDecode(response.body)['items']);
         return items.map((e) => RazorPayOrderResponse.fromMap(e)).toList();
       } else {
-        return null;
+        throw Exception('Error status code ${response.statusCode}');
       }
     } on HttpException catch (error) {
       throw error.message;

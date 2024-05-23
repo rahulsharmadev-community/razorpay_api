@@ -8,15 +8,16 @@ class RazorPayRefundAPI {
   final String _base;
   const RazorPayRefundAPI() : _base = 'https://api.razorpay.com/v1';
 
-  Future<RazorPayRefundResponse?> createRefund(
+  Future<RazorPayRefundResponse> createRefund(
       {required RazorPayRefund refund, required String paymentId}) async {
     try {
       final orderUri = Uri.parse('$_base/payments/$paymentId/refund');
       http.Response response = await http.post(orderUri, body: refund.toJson(), headers: RazorPayAPI.headers);
       if (response.statusCode == 200) {
         return RazorPayRefundResponse.fromString(response.body);
+      } else {
+        throw Exception('Error status code ${response.statusCode}');
       }
-      return null;
     } on RazorPayErrorResponse {
       rethrow;
     }
@@ -32,7 +33,7 @@ class RazorPayRefundAPI {
   ///
   /// - **skip:** The number of refunds to be skipped.
   ///
-  Future<List<RazorPayRefundResponse>?> fetchAllRefundsForPaymentId({
+  Future<List<RazorPayRefundResponse>> fetchAllRefundsForPaymentId({
     required String paymentId,
     DateTime? from,
     DateTime? to,
@@ -52,35 +53,38 @@ class RazorPayRefundAPI {
       if (response.statusCode == 200) {
         var items = List.from(jsonDecode(response.body)['items']);
         return items.map((e) => RazorPayRefundResponse.fromJson(e)).toList();
+      } else {
+        throw Exception('Error status code ${response.statusCode}');
       }
-      return null;
     } on RazorPayErrorResponse {
       rethrow;
     }
   }
 
-  Future<RazorPayRefundResponse?> fetchSpecificRefund(
+  Future<RazorPayRefundResponse> fetchSpecificRefund(
       {required String refundId, required String paymentId}) async {
     try {
       final orderUri = Uri.parse('$_base/payments/$paymentId/refunds/$refundId');
       http.Response response = await http.get(orderUri, headers: RazorPayAPI.headers);
       if (response.statusCode == 200) {
         return RazorPayRefundResponse.fromString(response.body);
+      } else {
+        throw Exception('Error status code ${response.statusCode}');
       }
-      return null;
     } on RazorPayErrorResponse {
       rethrow;
     }
   }
 
-  Future<RazorPayRefundResponse?> fetchById(String refundId) async {
+  Future<RazorPayRefundResponse> fetchById(String refundId) async {
     try {
       final orderUri = Uri.parse('$_base/refunds/$refundId');
       http.Response response = await http.get(orderUri, headers: RazorPayAPI.headers);
       if (response.statusCode == 200) {
         return RazorPayRefundResponse.fromString(response.body);
+      } else {
+        throw Exception('Error status code ${response.statusCode}');
       }
-      return null;
     } on RazorPayErrorResponse {
       rethrow;
     }
@@ -96,7 +100,7 @@ class RazorPayRefundAPI {
   ///
   /// - **skip:** The number of refunds to be skipped.
   ///
-  Future<List<RazorPayRefundResponse>?> fetchAll({
+  Future<List<RazorPayRefundResponse>> fetchAll({
     DateTime? from,
     DateTime? to,
     int? count,
@@ -116,7 +120,7 @@ class RazorPayRefundAPI {
         var items = List.from(jsonDecode(response.body)['items']);
         return items.map((e) => RazorPayRefundResponse.fromJson(e)).toList();
       } else {
-        return null;
+        throw Exception('Error status code ${response.statusCode}');
       }
     } on RazorPayErrorResponse {
       rethrow;

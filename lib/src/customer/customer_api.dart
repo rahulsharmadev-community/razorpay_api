@@ -8,7 +8,7 @@ class RazorPayCustomerAPI {
   final String customersPath;
   const RazorPayCustomerAPI() : customersPath = 'https://api.razorpay.com/v1/customers';
 
-  Future<RazorPayCustomerResponse?> createCustomer(RazorPayCustomer customer) async {
+  Future<RazorPayCustomerResponse> createCustomer(RazorPayCustomer customer) async {
     try {
       final customerUri = Uri.parse(customersPath);
       http.Response response =
@@ -16,7 +16,7 @@ class RazorPayCustomerAPI {
       if (response.statusCode == 200) {
         return RazorPayCustomerResponse.fromJson(response.body);
       } else {
-        return null;
+        throw Exception('Error status code ${response.statusCode}');
       }
     } on HttpException catch (error) {
       throw error.message;
@@ -32,7 +32,7 @@ class RazorPayCustomerAPI {
   ///   "gstin":"XYZXYZXYZXYZ"
   /// }
   /// ```
-  Future<RazorPayCustomerResponse?> editByCustomerId(String customerId, RazorPayCustomer customer) async {
+  Future<RazorPayCustomerResponse> editByCustomerId(String customerId, RazorPayCustomer customer) async {
     try {
       final customerUri = Uri.parse('$customersPath/$customerId');
 
@@ -45,14 +45,14 @@ class RazorPayCustomerAPI {
       if (response.statusCode == 200) {
         return RazorPayCustomerResponse.fromJson(response.body);
       } else {
-        return null;
+        throw Exception('Error status code ${response.statusCode}');
       }
     } on HttpException catch (error) {
       throw error.message;
     }
   }
 
-  Future<List<RazorPayCustomerResponse>?> fetchCustomerByCount({int length = 20, int startAt = 0}) async {
+  Future<List<RazorPayCustomerResponse>> fetchCustomerByCount({int length = 20, int startAt = 0}) async {
     try {
       final customerUri = Uri.parse('$customersPath?count=$length&skip=$startAt');
       http.Response response = await http.get(customerUri, headers: RazorPayAPI.headers);
@@ -61,21 +61,21 @@ class RazorPayCustomerAPI {
 
         return list.map((e) => RazorPayCustomerResponse.fromMap(e)).toList();
       } else {
-        return null;
+        throw Exception('Error status code ${response.statusCode}');
       }
     } on HttpException catch (error) {
       throw error.message;
     }
   }
 
-  Future<RazorPayCustomerResponse?> fetchCustomerById(String customerId) async {
+  Future<RazorPayCustomerResponse> fetchCustomerById(String customerId) async {
     try {
       final customerUri = Uri.parse('$customersPath/$customerId');
       http.Response response = await http.get(customerUri, headers: RazorPayAPI.headers);
       if (response.statusCode == 200) {
         return RazorPayCustomerResponse.fromJson(response.body);
       } else {
-        return null;
+        throw Exception('Error status code ${response.statusCode}');
       }
     } on HttpException catch (error) {
       throw error.message;
